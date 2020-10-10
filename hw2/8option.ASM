@@ -7,12 +7,15 @@ include 'win32a.inc'
 section '.data' data readable writable
 
 ;-------Вариант 8 Гребенщиков Максим Михайлович БПИ194---------------------------------------------------------------------------------------------------------------------------------------
+;-------B[i]=A[i]+5, при A[i]>5    B[i]=A[i]-5, при A[i]<-5   B[i]=0 иначе----------------------------------------------------------------------------------------------
+
 
         enterLength db 'Enter length of array: ', 0
         formatNum db '%d', 0
         formatNumOutput db '%d ', 0
         itemNumber db 'Number %d: ', 0
         wrong db 'Wrong input!',0
+        newLine db '', 10, 0
 
         size dd ?
         X dd ?
@@ -118,9 +121,10 @@ section '.code' code readable executable
 
 ;--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         outputArray:
+
                mov ebx, 0
                lp2:
-                        push [sortedArray+ebx*4]
+                        push [array+ebx*4]
                         push formatNumOutput
                         call[printf]
                         add esp, 8
@@ -128,6 +132,21 @@ section '.code' code readable executable
                         add ebx, 1
                         cmp ebx, [size]
                jne lp2
+
+               push newLine
+               call[printf]
+               add esp, 4
+
+               mov ebx, 0
+               lp4:
+                        push [sortedArray+ebx*4]
+                        push formatNumOutput
+                        call[printf]
+                        add esp, 8
+
+                        add ebx, 1
+                        cmp ebx, [size]
+               jne lp4
                ret
 
 ;--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
